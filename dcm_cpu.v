@@ -95,17 +95,17 @@ module dcm_cpu (
 				.vcounderrange ());
 	defparam
 		altpll_component.bandwidth_type = "AUTO",
-		altpll_component.clk0_divide_by = 5,
+		altpll_component.clk0_divide_by = 3,
 		altpll_component.clk0_duty_cycle = 50,
-		altpll_component.clk0_multiply_by = 8,
+		altpll_component.clk0_multiply_by = 20,
 		altpll_component.clk0_phase_shift = "0",
-		altpll_component.clk1_divide_by = 5,
+		altpll_component.clk1_divide_by = 2,
 		altpll_component.clk1_duty_cycle = 50,
-		altpll_component.clk1_multiply_by = 9,
+		altpll_component.clk1_multiply_by = 15,
 		altpll_component.clk1_phase_shift = "0",
 		altpll_component.compensate_clock = "CLK0",
-		altpll_component.inclk0_input_frequency = 20000,
-		altpll_component.intended_device_family = "Cyclone IV E",
+		altpll_component.inclk0_input_frequency = 83333,
+		altpll_component.intended_device_family = "Cyclone 10 LP",
 		altpll_component.lpm_hint = "CBX_MODULE_PREFIX=dcm_cpu",
 		altpll_component.lpm_type = "altpll",
 		altpll_component.operation_mode = "NORMAL",
@@ -174,7 +174,7 @@ endmodule
 // Retrieval info: PRIVATE: CREATE_INCLK1_CHECK STRING "0"
 // Retrieval info: PRIVATE: CUR_DEDICATED_CLK STRING "c0"
 // Retrieval info: PRIVATE: CUR_FBIN_CLK STRING "c0"
-// Retrieval info: PRIVATE: DEVICE_SPEED_GRADE STRING "Any"
+// Retrieval info: PRIVATE: DEVICE_SPEED_GRADE STRING "8"
 // Retrieval info: PRIVATE: DIV_FACTOR0 NUMERIC "1"
 // Retrieval info: PRIVATE: DIV_FACTOR1 NUMERIC "1"
 // Retrieval info: PRIVATE: DUTY_CYCLE0 STRING "50.00000000"
@@ -188,13 +188,13 @@ endmodule
 // Retrieval info: PRIVATE: GLOCKED_MODE_CHECK STRING "0"
 // Retrieval info: PRIVATE: GLOCK_COUNTER_EDIT NUMERIC "1048575"
 // Retrieval info: PRIVATE: HAS_MANUAL_SWITCHOVER STRING "1"
-// Retrieval info: PRIVATE: INCLK0_FREQ_EDIT STRING "50.000"
+// Retrieval info: PRIVATE: INCLK0_FREQ_EDIT STRING "12.000"
 // Retrieval info: PRIVATE: INCLK0_FREQ_UNIT_COMBO STRING "MHz"
 // Retrieval info: PRIVATE: INCLK1_FREQ_EDIT STRING "100.000"
 // Retrieval info: PRIVATE: INCLK1_FREQ_EDIT_CHANGED STRING "1"
 // Retrieval info: PRIVATE: INCLK1_FREQ_UNIT_CHANGED STRING "1"
 // Retrieval info: PRIVATE: INCLK1_FREQ_UNIT_COMBO STRING "MHz"
-// Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone IV E"
+// Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone 10 LP"
 // Retrieval info: PRIVATE: INT_FEEDBACK__MODE_RADIO STRING "1"
 // Retrieval info: PRIVATE: LOCKED_OUTPUT_CHECK STRING "0"
 // Retrieval info: PRIVATE: LONG_SCAN_RADIO STRING "1"
@@ -255,17 +255,17 @@ endmodule
 // Retrieval info: PRIVATE: ZERO_DELAY_RADIO STRING "0"
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: CONSTANT: BANDWIDTH_TYPE STRING "AUTO"
-// Retrieval info: CONSTANT: CLK0_DIVIDE_BY NUMERIC "5"
+// Retrieval info: CONSTANT: CLK0_DIVIDE_BY NUMERIC "3"
 // Retrieval info: CONSTANT: CLK0_DUTY_CYCLE NUMERIC "50"
-// Retrieval info: CONSTANT: CLK0_MULTIPLY_BY NUMERIC "8"
+// Retrieval info: CONSTANT: CLK0_MULTIPLY_BY NUMERIC "20"
 // Retrieval info: CONSTANT: CLK0_PHASE_SHIFT STRING "0"
-// Retrieval info: CONSTANT: CLK1_DIVIDE_BY NUMERIC "5"
+// Retrieval info: CONSTANT: CLK1_DIVIDE_BY NUMERIC "2"
 // Retrieval info: CONSTANT: CLK1_DUTY_CYCLE NUMERIC "50"
-// Retrieval info: CONSTANT: CLK1_MULTIPLY_BY NUMERIC "9"
+// Retrieval info: CONSTANT: CLK1_MULTIPLY_BY NUMERIC "15"
 // Retrieval info: CONSTANT: CLK1_PHASE_SHIFT STRING "0"
 // Retrieval info: CONSTANT: COMPENSATE_CLOCK STRING "CLK0"
-// Retrieval info: CONSTANT: INCLK0_INPUT_FREQUENCY NUMERIC "20000"
-// Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone IV E"
+// Retrieval info: CONSTANT: INCLK0_INPUT_FREQUENCY NUMERIC "83333"
+// Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone 10 LP"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altpll"
 // Retrieval info: CONSTANT: OPERATION_MODE STRING "NORMAL"
 // Retrieval info: CONSTANT: PLL_TYPE STRING "AUTO"

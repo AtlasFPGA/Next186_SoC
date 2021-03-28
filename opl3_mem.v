@@ -105,7 +105,7 @@ module opl3_mem (
 		altsyncram_component.indata_reg_b = "CLOCK0",
 		altsyncram_component.init_file = "opl3.mif",
 		altsyncram_component.init_file_layout = "PORT_A",
-		altsyncram_component.intended_device_family = "Cyclone IV E",
+		altsyncram_component.intended_device_family = "Cyclone 10 LP",
 		altsyncram_component.lpm_type = "altsyncram",
 		altsyncram_component.numwords_a = 8192,
 		altsyncram_component.numwords_b = 4096,
@@ -158,7 +158,7 @@ endmodule
 // Retrieval info: PRIVATE: INDATA_REG_B NUMERIC "1"
 // Retrieval info: PRIVATE: INIT_FILE_LAYOUT STRING "PORT_A"
 // Retrieval info: PRIVATE: INIT_TO_SIM_X NUMERIC "0"
-// Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone IV E"
+// Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone 10 LP"
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
@@ -200,7 +200,7 @@ endmodule
 // Retrieval info: CONSTANT: INDATA_REG_B STRING "CLOCK0"
 // Retrieval info: CONSTANT: INIT_FILE STRING "opl3.mif"
 // Retrieval info: CONSTANT: INIT_FILE_LAYOUT STRING "PORT_A"
-// Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone IV E"
+// Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone 10 LP"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
 // Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "8192"
 // Retrieval info: CONSTANT: NUMWORDS_B NUMERIC "4096"
