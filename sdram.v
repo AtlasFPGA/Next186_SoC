@@ -45,8 +45,8 @@
 `define RD2 8'h20		// 64 bytes - cmd 11
 `define WR2 8'h20		// 64 bytes - cmd 01
 `define PitchBits	1	
-`define ColBits	9	// column bits
-`define RowBits	13	// row bits
+`define ColBits	8	// column bits
+`define RowBits	12	// row bits
 `define BankBits	2	// bank bits
 
 `define tRP		3
@@ -56,7 +56,7 @@
 `define CL		3		// CAS latency
 `define tREF	64		// ms
 
-`define RFB 10			// refresh bit = floor(log2(CLK*`tREF/(2^RowBits)))
+`define RFB 11			// refresh bit = floor(log2(CLK*`tREF/(2^RowBits)))
 
 
 module SDRAM_16bit(

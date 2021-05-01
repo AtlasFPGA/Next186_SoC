@@ -1,9 +1,9 @@
-// Next186 SoC NeptUNO port by DistWave
+// Next186 SoC ATLAS port by DistWave
 
 module Next186_SoC(
 
-	input CLOCK_50,
-	output	[12:0]DRAM_ADDR,
+	input CLOCK_12,
+	output	[11:0]DRAM_ADDR,
 	output	[1:0]DRAM_BA,
 	output	DRAM_CAS_N,
 	output	DRAM_CKE,
@@ -13,20 +13,16 @@ module Next186_SoC(
 	output	[1:0]DRAM_DQM,
 	output	DRAM_RAS_N,
 	output	DRAM_WE_N,
-	output [19:0] SRAM_ADDR,
-	inout [15:0] SRAM_DQ,
-	output SRAM_OE_N,
-	output SRAM_WE_N,
-	output SRAM_UB_N,
-	output SRAM_LB_N,
-	output [5:0]VGA_R,
-	output [5:0]VGA_G,
-	output [5:0]VGA_B,
-	output VGA_VSYNC,
-	output VGA_HSYNC,
-	output SDLED,
-	input BTN_SOUTH,
-	input BTN_WEST,
+	output wire Out_TMDS_D0,
+	output wire Out_TMDS_D1,
+	output wire Out_TMDS_D2,
+	output wire Out_TMDS_CLK,
+	output wire Out_TMDS_D0_N,
+	output wire Out_TMDS_D1_N,
+	output wire Out_TMDS_D2_N,
+	output wire Out_TMDS_CLK_N,
+	output [7:0]LEDS,
+	input BTN_USER,
 	inout PS2_CLKA,
 	inout PS2_DATA,
 	inout PS2_CLKB,
@@ -39,28 +35,25 @@ module Next186_SoC(
 	output SD_DI,
 	input RX_EXT,
 	output TX_EXT,
-	output MIDI_OUT,
-	input CLKBD,
-	input WSBD,
-	input DABD,
-	output LRCLK,
-	output SDIN,
-	output SCLK,
-	output STM_RST
+	output MIDI_OUT
 );
 
 	wire SDR_CLK;
-	wire [7:0]LEDS;
 	assign DRAM_CKE = 1'b1;
-	assign SRAM_ADDR = 20'h00000;
-	assign SRAM_DQ[15:0] = 16'hZZZZ;
-	assign SRAM_OE_N = 1'b1;
-	assign SRAM_WE_N = 1'b1;
-	assign SRAM_UB_N = 1'b1;
-	assign SRAM_LB_N = 1'b1;
-	assign STM_RST = 1'b0;
-	assign SDLED = ~LEDS[1];
-
+	wire [5:0]VGA_R;
+	wire [5:0]VGA_G;
+	wire [5:0]VGA_B;
+	wire VGA_BLNK;
+	wire VGA_VSYNC;
+	wire VGA_HSYNC;
+	wire [7:0] r8b,g8b,b8b;
+	assign r8b = {VGA_R, 2'b00};
+	assign g8b = {VGA_G, 2'b00};
+	assign b8b = {VGA_B, 2'b00};
+   wire clk125m;
+	wire clkvga;
+	wire VGA_CLK;
+	wire HDMI_CLK;
 
 
 	dd_buf sdrclk_buf
@@ -73,13 +66,16 @@ module Next186_SoC(
 
 	system sys_inst
 	(
-		.CLK_50MHZ(CLOCK_50),
+		.CLK_12MHZ(CLOCK_12),
 		.VGA_R(VGA_R),
 		.VGA_G(VGA_G),
 		.VGA_B(VGA_B),
 		.frame_on(),
 		.VGA_HSYNC(VGA_HSYNC),
 		.VGA_VSYNC(VGA_VSYNC),
+		.VGA_BLNK(VGA_BLNK),
+		.VGA_CLK(VGA_CLK),
+		.HDMI_CLK(HDMI_CLK),
 		.sdr_CLK_out(SDR_CLK),
 		.sdr_n_CS_WE_RAS_CAS({DRAM_CS_N, DRAM_WE_N, DRAM_RAS_N, DRAM_CAS_N}),
 		.sdr_BA(DRAM_BA),
@@ -87,8 +83,8 @@ module Next186_SoC(
 		.sdr_DATA(DRAM_DQ),
 		.sdr_DQM({DRAM_DQM}),
 		.LED(LEDS),
-		.BTN_RESET(~BTN_SOUTH),
-		.BTN_NMI(~BTN_WEST),
+		.BTN_RESET(~BTN_USER),
+		.BTN_NMI(),
 		.RS232_DCE_RXD(RX_EXT),
 		.RS232_DCE_TXD(TX_EXT),
 		.RS232_EXT_RXD(),
@@ -99,6 +95,7 @@ module Next186_SoC(
 		.SD_DO(SD_DO),
 		.AUD_L(AUDIO_L),
 		.AUD_R(AUDIO_R),
+		.MIDI_OUT(MIDI_OUT),
 	 	.PS2_CLK1(PS2_CLKA),
 		.PS2_CLK2(PS2_CLKB),
 		.PS2_DATA1(PS2_DATA),
@@ -106,19 +103,26 @@ module Next186_SoC(
 		.RS232_HOST_RXD(),
 		.RS232_HOST_TXD(),
 		.RS232_HOST_RST(),
-		.GPIO(),
-		.I2C_SCL(),
-		.I2C_SDA(),
-		.I2S_LRCLK(LRCLK),
-		.I2S_SDIN(SDIN),
-		.I2S_SCLK(SCLK),
-		.I2S_MCLK(),
-		.MIDI_OUT(MIDI_OUT),
-		.CLKBD(CLKBD),
-		.WSBD(WSBD),
-		.DABD(DABD)
+		.GPIO()
 	);
 
+	hdmi hdmi_18bits
+	(
+		//clocks
+		.CLK_DVI_I(HDMI_CLK),	 
+		.CLK_PIXEL_I(VGA_CLK),		
 	
+		// components
+		.R_I({VGA_R, 2'b00}),
+		.G_I({VGA_G, 2'b00}),
+		.B_I({VGA_B, 2'b00}),
+		.BLANK_I(VGA_BLNK),
+		.HSYNC_I(VGA_HSYNC),			
+		.VSYNC_I(VGA_VSYNC),			
+		.TMDS_D0_O(Out_TMDS_D0),		
+		.TMDS_D1_O(Out_TMDS_D1),		
+		.TMDS_D2_O(Out_TMDS_D2),		
+		.TMDS_CLK_O(Out_TMDS_CLK)
+	);	
 endmodule
 

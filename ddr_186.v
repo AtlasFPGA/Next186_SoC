@@ -153,16 +153,19 @@ module system
 		 output sdr_CLK_out,
 		 output [3:0]sdr_n_CS_WE_RAS_CAS,
 		 output [1:0]sdr_BA,
-		 output [12:0]sdr_ADDR,
+		 output [11:0]sdr_ADDR,
 		 inout [15:0]sdr_DATA,
 		 output [1:0]sdr_DQM,
-		 input 	CLK_50MHZ,
+		 input 	CLK_12MHZ,
 		 output reg [5:0]VGA_R,
 		 output reg [5:0]VGA_G,
 		 output reg [5:0]VGA_B,
 		 output frame_on,
 		 output wire VGA_HSYNC,
 		 output wire VGA_VSYNC,
+		 output wire VGA_BLNK,
+		 output wire VGA_CLK,
+		 output wire HDMI_CLK,
 		 input BTN_RESET,	// Reset
 		 input BTN_NMI,		// NMI
 		 output [7:0]LED,	// HALT
@@ -189,18 +192,13 @@ module system
 		 inout [7:0]GPIO,
 		 output I2C_SCL,
 		 inout I2C_SDA,
-		 output wire I2S_MCLK,
-		 output wire I2S_SCLK,
-		 output wire I2S_LRCLK,
-		 output wire I2S_SDIN,
-		 output MIDI_OUT,
-		 input CLKBD,
-		 input WSBD,
-		 input DABD
+		 output MIDI_OUT
     );
 
 	initial SD_n_CS = 1'b1;
-	
+	assign VGA_BLNK = hblnk || vblnk;
+	assign VGA_CLK = clk_25;
+	assign HDMI_CLK = clk_sdr;
 	wire [15:0]cntrl0_user_input_data;//i
 	wire [1:0]sys_cmd_ack;
 	wire sys_rd_data_valid;
@@ -397,7 +395,6 @@ module system
 	wire [7:0]i2cdout;
 	wire i2cack;
 	wire i2cackerr;
-
 	
 // opl3 interface
     wire [7:0]opl32_data;
@@ -405,14 +402,10 @@ module system
     wire [15:0]opl3right;
     wire stb44100;
 
-// MIDI interface
-    wire [15:0]midi_left;
-    wire [15:0]midi_right;
-	 
 // NMI on IORQ
 	reg [15:0]NMIonIORQ_LO = 16'h0001;
 	reg [15:0]NMIonIORQ_HI = 16'h0000;
-	assign LED = {1'b0, !cpu32_halt, AUD_L, AUD_R, planarreq, |sys_cmd_ack, ~SD_n_CS, HALT};
+	assign LED = {~MIDI_OUT, !cpu32_halt, AUD_L, AUD_R, planarreq, |sys_cmd_ack, ~SD_n_CS, HALT};
 	assign frame_on = s_displ_on[16+vgatext[1]];
 	
 	assign PORT_IN[15:8] = 
@@ -442,7 +435,7 @@ module system
 
 	dcm dcm_system 
 	(
-		.inclk0(CLK_50MHZ), 
+		.inclk0(CLK_12MHZ), 
 		.c0(clk_25), 
 		.c1(clk_sdr),
 		.c2(sdr_CLK_out),
@@ -452,7 +445,7 @@ module system
 	 
 	 dcm_cpu dcm_cpu_inst
 	 (
-		.inclk0(CLK_50MHZ), 
+		.inclk0(CLK_12MHZ), 
 		.c0(clk_cpu),
 		.c1(clk_dsp)
 	 );
@@ -735,15 +728,8 @@ module system
       .stb44100(stb44100),
 		.full(sq_full),	// when not full, write max 2x1152 16bit samples
 		.dss_full(dss_full),
-		.midi_left(midi_left),
-		.midi_right(midi_right),
 		.AUDIO_L(AUD_L),
-		.AUDIO_R(AUD_R),
-		.CLK_I2S(CLK_50MHZ),
-		.I2S_MCLK(I2S_MCLK),
-		.I2S_SCLK(I2S_SCLK),
-		.I2S_LRCLK(I2S_LRCLK),
-		.I2S_SDIN(I2S_SDIN)
+		.AUDIO_R(AUD_R)
 	);
 	 
 	DSP32 DSP32_inst
@@ -773,7 +759,7 @@ module system
     );
     
     opl3 opl3_inst (
-        .clk(CLK_50MHZ), // 50Mhz (min 45Mhz)
+        .clk(clk_dsp), // 50Mhz (min 45Mhz)
         .cpu_clk(clk_cpu),
         .addr(PORT_ADDR[1:0]),
         .din(CPU_DOUT[7:0]),
@@ -797,15 +783,6 @@ module system
 		.dout(MPU401_DOUT),
 		.midi_out(MIDI_OUT)
 	);
-
-	i2s_decoder i2s_midi (
-		.clk(clk_25),
-		.sck(CLKBD),
-		.ws(WSBD),
-		.sd(DABD),
-		.left_out(midi_left),
-		.right_out(midi_right)
-	);
 	
 	i2c_master_byte i2cmb
 	(
@@ -819,7 +796,7 @@ module system
 		.SDA(I2C_SDA),
 		.rst(1'b0)
 	);
-	
+
 	reg nop;
 	always @ (posedge clk_sdr) begin
 		s_prog_full <= fifo_wr_used_words > 350; // AlmostFull;

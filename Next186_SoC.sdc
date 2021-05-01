@@ -6,7 +6,7 @@
 #**************************************************************
 # Create Clock
 #**************************************************************
-create_clock -period 20 [get_ports CLOCK_50]
+create_clock -period 83.3333 [get_ports CLOCK_12]
 
 #**************************************************************
 # Create Generated Clock
@@ -114,8 +114,8 @@ set_false_path  -from  [get_clocks {sys_inst|dcm_system|altpll_component|auto_ge
 set_false_path  -from  [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[4]}] -to [get_clocks {sys_inst|dcm_cpu_inst|altpll_component|auto_generated|pll1|clk[0]}]  
 set_false_path  -from  [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[0]}] -to [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[1]}]  
 set_false_path  -from  [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[1]}] -to [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[0]}]  
-set_false_path -from [get_clocks {CLOCK_50}] -to [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[3]}]
-set_false_path -from [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[3]}] -to [get_clocks {CLOCK_50}]
+set_false_path -from [get_clocks {CLOCK_12}] -to [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[3]}]
+set_false_path -from [get_clocks {sys_inst|dcm_system|altpll_component|auto_generated|pll1|clk[3]}] -to [get_clocks {CLOCK_12}]
 
 set_false_path -from [get_registers {system:sys_inst|VGA_SC:sc|planarreq}]
 
