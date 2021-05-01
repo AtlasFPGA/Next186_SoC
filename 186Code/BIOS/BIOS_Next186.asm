@@ -180,7 +180,7 @@ SCANCODE1   equ 1
 ;       f000h                   15000h
 
 
-RAMSize   equ    200h        ; 64KB segments
+RAMSize   equ    80h        ; 64KB segments
 
 ; Graphics character set
 font8x8		equ	bios - 800h        
@@ -190,7 +190,7 @@ font8x14	equ	font8x16 - 0e00h
 
 		org 0e000h
 bios:        
-biosmsg     db 'Next186 NeptUNO SoC PC BIOS (C) 2017 Nicolae Dumitrache', 0
+biosmsg     db 'Next186 Atlas SoC PC BIOS (C) 2017 Nicolae Dumitrache', 0
 msgmb       db 'MB SD Card', 13, 10, 0
 msgkb       db 'PS2 KB detected', 13, 10, 0
 
